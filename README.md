@@ -1,16 +1,98 @@
-## Hi there 👋
-
-<!--
-**matematingk1/matematingk1** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
-
-Here are some ideas to get you started:
-
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Siapa Jadi Juara? — Transformasi Fungsi</title>
+<style>
+:root{--navy:#07132f;--blue:#102d70;--gold:#ffd45a;--cyan:#55d9ff;--white:#f4f7ff}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,Segoe UI,Arial;background:radial-gradient(circle at 50% 10%,#173c91,#07132f 65%);color:var(--white);min-height:100vh}
+.wrap{max-width:1100px;margin:auto;padding:20px}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.brand{font-weight:900;letter-spacing:1px;color:var(--gold);font-size:clamp(20px,4vw,30px)}.pill{border:1px solid #5276bd;border-radius:999px;padding:8px 14px;background:#102452}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 270px;gap:18px;margin-top:22px}
+.panel{background:linear-gradient(145deg,#123477dd,#091a43ee);border:1px solid #3d65b2;border-radius:20px;padding:22px;box-shadow:0 18px 40px #0005}
+.stage{min-height:520px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}
+.kicker{color:var(--cyan);text-transform:uppercase;letter-spacing:2px;font-size:13px;font-weight:800}
+h1{font-size:clamp(28px,5vw,48px);line-height:1.1;margin:12px 0;color:var(--gold)}
+p{line-height:1.6;color:#dce7ff}.btn{border:0;border-radius:12px;padding:13px 20px;font-size:16px;font-weight:800;cursor:pointer;background:var(--gold);color:#17224a;box-shadow:0 5px 0 #b88b24;transition:.15s}.btn:hover{transform:translateY(-2px)}.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.secondary{background:#214a91;color:white;box-shadow:0 5px 0 #102b60;border:1px solid #5a83ca}
+.question{font-size:clamp(19px,3vw,27px);font-weight:750;margin:20px 0 26px;line-height:1.4}
+.answers{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%}
+.answer{background:#102b67;border:2px solid #4b77bd;color:white;text-align:left;padding:15px;border-radius:14px;cursor:pointer;font-size:16px;min-height:65px}
+.answer b{color:var(--gold);margin-right:10px}.answer:hover:not(:disabled){background:#1a438e;border-color:var(--cyan)}.answer:disabled{cursor:default}.answer.correct{background:#126344;border-color:#65f0a5}.answer.wrong{background:#792b47;border-color:#ff8aa8}
+.feedback{margin-top:18px;padding:15px;border-radius:12px;background:#071a3d;border:1px solid #4468a9;text-align:left;width:100%}
+.lifelines{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin:15px 0}.life{background:#183e83;color:#fff;border:1px solid #79a3ec;border-radius:999px;padding:9px 13px;cursor:pointer}.life:disabled{opacity:.35;cursor:not-allowed}
+.ladder h3{margin:0 0 14px;color:var(--gold)}.levels{display:flex;flex-direction:column-reverse;gap:5px}.level{padding:7px 10px;border-radius:8px;display:flex;justify-content:space-between;font-size:14px;color:#d6e3ff}.level.safe{color:var(--gold);font-weight:800}.level.active{background:var(--gold);color:#14234c;font-weight:900}
+.small{font-size:13px;color:#a9c3f2}.hidden{display:none!important}.foot{text-align:center;color:#9ab2e5;font-size:12px;margin:18px}
+@media(max-width:800px){.layout{grid-template-columns:1fr}.ladder{order:2}.stage{min-height:440px}.answers{grid-template-columns:1fr}.wrap{padding:12px}.panel{padding:16px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><div class="brand">★ SIAPA JADI JUARA?</div><div class="pill">MATEMATIKA KELAS XII · TRANSFORMASI FUNGSI</div></div>
+  <div class="layout">
+    <main class="panel stage" id="stage">
+      <div id="intro">
+        <div class="kicker">Educational Quiz Challenge</div>
+        <h1>Siap Menjadi<br>Juara Matematika?</h1>
+        <p>Jawab 15 pertanyaan transformasi fungsi.<br>Gunakan bantuan dengan bijak dan raih 1.000.000 poin!</p>
+        <p class="small">Materi: translasi, refleksi, dilatasi, dan rotasi grafik fungsi.</p>
+        <button class="btn" onclick="startGame()">MULAI GAME ▶</button>
+      </div>
+      <div id="play" class="hidden" style="width:100%">
+        <div class="kicker" id="levelLabel">PERTANYAAN 1</div>
+        <div class="question" id="question"></div>
+        <div class="answers" id="answers"></div>
+        <div class="lifelines">
+          <button class="life" id="fifty" onclick="use5050()">½ 50:50</button>
+          <button class="life" id="friend" onclick="useFriend()">☎ Tanya Teman</button>
+          <button class="life" id="hint" onclick="useHint()">💡 Petunjuk</button>
+        </div>
+        <div class="feedback hidden" id="feedback"></div>
+        <div style="margin-top:18px"><button class="btn hidden" id="next" onclick="nextQuestion()">LANJUT ▶</button></div>
+      </div>
+      <div id="end" class="hidden">
+        <div class="kicker">Permainan Selesai</div><h1 id="endTitle">Hebat!</h1>
+        <p id="endText"></p><button class="btn" onclick="startGame()">MAIN LAGI ↻</button>
+      </div>
+    </main>
+    <aside class="panel ladder"><h3>🏆 Tangga Poin</h3><div class="levels" id="levels"></div><p class="small">Level aman: 5 dan 10<br>Jawaban salah mengakhiri permainan.</p></aside>
+  </div>
+  <div class="foot">Belajar sambil bermain • Semangat mencoba!</div>
+</div>
+<script>
+const prize=[100,200,300,500,1000,2000,4000,8000,16000,32000,64000,125000,250000,500000,1000000];
+const qs=[
+{q:"Grafik y = f(x) digeser 3 satuan ke kanan. Bentuk fungsi barunya adalah …",a:["y=f(x+3)","y=f(x−3)","y=f(x)+3","y=f(x)−3"],c:1,e:"Translasi ke kanan 3 satuan mengubah x menjadi x−3."},
+{q:"Grafik y=f(x) ditranslasikan 4 satuan ke atas. Persamaan hasilnya …",a:["y=f(x−4)","y=f(x+4)","y=f(x)+4","y=f(x)−4"],c:2,e:"Translasi vertikal ke atas menambahkan 4 pada nilai fungsi."},
+{q:"Refleksi grafik y=f(x) terhadap sumbu-X menghasilkan …",a:["y=f(−x)","y=−f(x)","y=f(x)+1","y=f(x−1)"],c:1,e:"Refleksi terhadap sumbu-X mengubah setiap y menjadi −y."},
+{q:"Grafik y=f(x) dicerminkan terhadap sumbu-Y. Hasilnya …",a:["y=−f(x)","y=f(x)+1","y=f(−x)","y=−f(−x)"],c:2,e:"Refleksi terhadap sumbu-Y mengganti x dengan −x."},
+{q:"Jika f(x)=x², maka grafik y=f(x)+2 adalah …",a:["x² digeser 2 ke bawah","x² digeser 2 ke atas","x² digeser 2 ke kanan","x² dicerminkan"],c:1,e:"Penambahan konstanta di luar fungsi menggeser grafik ke atas."},
+{q:"Grafik y=2f(x) merupakan dilatasi vertikal dengan faktor …",a:["1/2","−2","2","−1"],c:2,e:"Nilai fungsi dikalikan 2, sehingga jarak titik dari sumbu-X menjadi dua kali."},
+{q:"Untuk f(x)=x², bentuk y=f(x−2) adalah …",a:["(x+2)²","x²−2","(x−2)²","x²+2"],c:2,e:"Penggantian x menjadi x−2 menggeser grafik 2 satuan ke kanan."},
+{q:"Grafik y=−f(x) mengalami refleksi terhadap …",a:["sumbu-X","sumbu-Y","garis y=x","titik asal"],c:0,e:"Tanda negatif di luar f(x) membalik koordinat y."},
+{q:"Jika f(x)=2x+1, maka f(−x) adalah …",a:["2x−1","−2x+1","−2x−1","2x+1"],c:1,e:"Substitusi −x: f(−x)=2(−x)+1=−2x+1."},
+{q:"Grafik y=f(x+3) bergeser …",a:["3 ke kanan","3 ke atas","3 ke kiri","3 ke bawah"],c:2,e:"Tanda di dalam kurung berlawanan arah: x+3 berarti ke kiri 3."},
+{q:"Rotasi 180° terhadap titik asal mengubah (x,y) menjadi …",a:["(y,x)","(−x,y)","(x,−y)","(−x,−y)"],c:3,e:"Rotasi 180° berlawanan arah jarum jam memetakan (x,y) ke (−x,−y)."},
+{q:"Grafik y=f(x) direfleksikan terhadap garis y=x. Hubungan grafik hasil dengan f adalah …",a:["grafik fungsi invers (jika invers ada)","y=−f(x)","y=f(−x)","y=f(x)+1"],c:0,e:"Refleksi terhadap y=x menukar posisi x dan y; grafiknya berkaitan dengan fungsi invers."},
+{q:"Jika f(x)=x²−1, maka f(x−1) adalah …",a:["x²−2x","(x−1)²−1","x²+1","(x+1)²−1"],c:1,e:"Substitusi x−1: (x−1)²−1."},
+{q:"Dilatasi vertikal faktor 3 pada f(x)=x−2 menghasilkan …",a:["3x−2","x−6","3x−6","x/3−2"],c:2,e:"3f(x)=3(x−2)=3x−6."},
+{q:"Grafik y=f(x) diputar 90° berlawanan arah jarum jam terhadap O. Transformasi titiknya …",a:["(x,y)→(y,−x)","(x,y)→(−y,x)","(x,y)→(−x,−y)","(x,y)→(x,−y)"],c:1,e:"Rotasi 90° berlawanan arah jarum jam memetakan (x,y) menjadi (−y,x)."}
+];
+let idx=0,score=0,used={f:false,friend:false,hint:false},answered=false,removed=[];
+const $=id=>document.getElementById(id);
+function fmt(n){return n.toLocaleString('id-ID')}
+function buildLadder(){ $('levels').innerHTML=prize.map((p,i)=>`<div class="level ${i===idx?'active':''} ${i===4||i===9?'safe':''}" id="lv${i}"><span>${i+1}</span><span>${fmt(p)}</span></div>`).join('')}
+function startGame(){idx=0;score=0;used={f:false,friend:false,hint:false};$('intro').classList.add('hidden');$('end').classList.add('hidden');$('play').classList.remove('hidden');render()}
+function render(){answered=false;removed=[];buildLadder();$('levelLabel').textContent=`PERTANYAAN ${idx+1} · ${fmt(prize[idx])} POIN`;$('question').textContent=qs[idx].q;$('feedback').classList.add('hidden');$('next').classList.add('hidden');
+$('answers').innerHTML=qs[idx].a.map((v,i)=>`<button class="answer" id="a${i}" onclick="choose(${i})"><b>${'ABCD'[i]}.</b>${v}</button>`).join('');
+$('fifty').disabled=used.f;$('friend').disabled=used.friend;$('hint').disabled=used.hint}
+function choose(n){if(answered)return;answered=true;let correct=qs[idx].c;document.querySelectorAll('.answer').forEach((b,i)=>{b.disabled=true;if(i===correct)b.classList.add('correct');if(i===n&&n!==correct)b.classList.add('wrong')});
+let ok=n===correct;if(ok)score=prize[idx];let f=$('feedback');f.classList.remove('hidden');f.innerHTML=`<strong>${ok?'✅ BENAR!':'❌ BELUM TEPAT'}</strong><p>${qs[idx].e}</p><p>${ok?'Poin saat ini: '+fmt(score):'Poin terakhir: '+fmt(score)}</p>`;
+$('next').textContent=idx===14?'LIHAT HASIL 🏆':'LANJUT ▶';$('next').classList.remove('hidden');if(!ok)$('next').textContent='LIHAT HASIL';}
+function nextQuestion(){if(!answered)return;if(idx===14||score!==prize[idx])finish();else{idx++;render()}}
+function finish(){ $('play').classList.add('hidden');$('end').classList.remove('hidden');$('endTitle').textContent=score===1000000?'MILLIONAIRE! 🎉':'Kamu Hebat!';$('endText').textContent=`Kamu memperoleh ${fmt(score)} poin. ${score===1000000?'Semua pertanyaan berhasil dijawab!':'Terus berlatih transformasi fungsi dan coba lagi!'}`;}
+function use5050(){if(used.f||answered)return;used.f=true;let correct=qs[idx].c,wrong=[0,1,2,3].filter(x=>x!==correct);wrong.sort(()=>Math.random()-.5);wrong.slice(0,2).forEach(x=>{$('a'+x).disabled=true;$('a'+x).style.visibility='hidden'});$('fifty').disabled=true}
+function useFriend(){if(used.friend||answered)return;used.friend=true;$('friend').disabled=true;let c='ABCD'[qs[idx].c];$('feedback').classList.remove('hidden');$('feedback').innerHTML=`☎ <b>Teman berkata:</b><p>Menurut saya, jawaban yang paling tepat adalah <b>${c}</b>. Coba pertimbangkan kembali!</p>`}
+function useHint(){if(used.hint||answered)return;used.hint=true;$('hint').disabled=true;$('feedback').classList.remove('hidden');$('feedback').innerHTML=`💡 <b>Petunjuk:</b><p>${qs[idx].e}</p>`}
+</script>
+</body></html>
